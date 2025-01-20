@@ -1,0 +1,59 @@
+
+
+def play_crash_game():
+    # Initial setup
+    balance = 100  # Starting balance
+    min_bet = 1
+    max_bet = 10
+    print("Welcome to the Crash game!")
+    print(f"Your starting balance is ${balance:.2f}")
+
+    while True:
+        # Get the player's bet
+        try:
+            bet = float(input(f"Enter your bet (${min_bet}-${max_bet}): "))
+            if bet < min_bet or bet > max_bet or bet > balance:
+                print(f"Invalid bet amount. Please bet between ${min_bet} and ${max_bet}, and not more than your balance.")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a numerical value.")
+            continue
+
+        # Deduct the bet amount from the balance
+        balance -= bet
+
+        # Generate a random crash point
+        crash_point = random.uniform(1.1, 5.0)
+        print("Game starting...")
+
+        multiplier = 1.0
+        while True:
+            # Increase the multiplier
+            multiplier += 0.1
+            print(f"Multiplier: {multiplier:.1f}x")
+            time.sleep(0.5)  # Faster game speed
+
+            # Simulate the crash
+            if random.random() < (1 / crash_point):
+                print("Crash!")
+                break
+
+            # Allow player to cash out
+            cash_out = input("Press 'c' to cash out or any other key to continue: ").lower()
+            if cash_out == 'c':
+                winnings = bet * multiplier
+                balance += winnings
+                print(f"You cashed out at {multiplier:.1f}x and won ${winnings:.2f}!")
+                break
+
+        print(f"Your current balance is ${balance:.2f}")
+
+        # Check if the player wants to play again
+        play_again = input("Do you want to play again? (yes/no): ").lower()
+        if play_again != 'yes':
+            break
+
+    print("Thanks for playing!")
+
+if __name__ == "__main__":
+    play_crash_game()
